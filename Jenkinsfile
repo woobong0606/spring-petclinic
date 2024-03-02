@@ -91,25 +91,24 @@ pipeline {
         stage('Codedeploy Workload') {
             steps {
                 echo "create application"
-                sh 'aws deploy create-application --application-name aws00'
-               
-                echo "create Codedeploy group"   
-                sh '''
-                    aws deploy create-deployment-group \
-                    --application-name aws00 \
-                    --auto-scaling-groups aws00-asg \
-                    --deployment-group-name aws00-code-deploy \
-                    --deployment-config-name CodeDeployDefault.OneAtATime \
-                    --service-role-arn arn:aws:iam::257307634175:role/aws00-codedeploy-service-role
-                    '''
-                echo "Codedeploy Workload"   
-                sh '''
-                    aws deploy create-deployment --application-name aws00 \
-                    --deployment-config-name CodeDeployDefault.OneAtATime \
-                    --deployment-group-name aws00-code-deploy \
-                    --s3-location bucket=aws00-codedeploy,bundleType=zip,key=deploy-1.0.zip
-                    '''
-                    sleep(10) // sleep 10s
+                step([$class: "AWSCodeDeployPublisher'",
+                    applicationName: "aws00",
+                    credentials: "${AWS_CREDENTIAL_NAME}",
+                    deploymentConfig: "CodeDeployDefault.OneAtATime", 
+                    deploymentGroupAppspec: false, 
+                    deploymentGroupName: 'aws00-code-deploy', 
+                    excludes: "", 
+                    iamRoleArn: "arn:aws:iam::257307634175:role/aws00-codedeploy-service-role", 
+                    includes: "**", 
+                    proxyHost: "", 
+                    proxyPort: 0, 
+                    region: "ap-northeast-2", 
+                    s3bucket: "aws00-codedeploy", 
+                    s3prefix: "", 
+                    subdirectory: "", 
+                    versionFileName: "",
+                    waitForCompletion: false])
+                sleep(10) // sleep 10s
             }
         }
     }
