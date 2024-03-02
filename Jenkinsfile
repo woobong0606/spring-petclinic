@@ -44,7 +44,7 @@ pipeline {
         stage ('Docker Build') {
             steps {
                 dir("${env.WORKSPACE}") {
-                    sh 'docker build -t aws00-spring-petclinic:1.0 .'
+                    app = docker.build("${ECR_REPOSITORY}/${DOCKER_IMAGE_NAME}")
                 }
             }
         }
@@ -53,10 +53,13 @@ pipeline {
                 echo "Push Docker Image to ECR"
                 script{
                     // cleanup current user docker credentials
-                    sh 'rm -f ~/.dockercfg ~/.docker/config.json || true' 
-                    sh 'aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 257307634175.dkr.ecr.ap-northeast-2.amazonaws.com'
-                    sh 'docker tag aws00-spring-petclinic:1.0 257307634175.dkr.ecr.ap-northeast-2.amazonaws.com/aws00-spring-petclinic:1.0'
-                    sh 'docker push 257307634175.dkr.ecr.ap-northeast-2.amazonaws.com/aws00-spring-petclinic:1.0'
+                    sh 'rm -rf ~/.dockercfg || true'
+                    sh 'rm -rf ~/.docker/config.json || true' 
+                    docker.withRegistry("https://${ECR_REPOSITORY}", "ecr:${REGION}:${AWS_CREDENTIAL_NAME}") {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("${latest}")
+                    }
+                    
                 }
             }
             post {
