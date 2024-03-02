@@ -111,7 +111,7 @@ pipeline {
                       s3prefix: "", 
                       subdirectory: "", 
                       versionFileName: "",
-                      waitForCompletion: true
+                      waitForCompletion: true,
                       pollingTimeoutSec: 1800])
                   }
                 }
