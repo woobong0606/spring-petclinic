@@ -11,4 +11,4 @@ aws ecr get-login-password --region ${REGION} \
 export IMAGE=${ECR_DOCKER_IMAGE};
 export TAG=${ECR_DOCKER_TAG};
 cd /home/ubuntu/deploy
-docker compose up -d --build;
+docker-compose up -d --build;
