@@ -5,6 +5,15 @@ pipeline {
         jdk "jdk17"
         maven "M3"
     }
+    environment {
+        AWS_CREDENTIAL_NAME = "AWSCredentials"
+        REGION = "ap-northeast-2"
+        DOCKER_IMAGE_NAME="aws00-spring-petclinic"
+        DOCKER_TAG="1.0"
+        ECR_REPOSITORY = "257307634175.dkr.ecr.ap-northeast-2.amazonaws.com"
+        ECR_DOCKER_IMAGE = "${ECR_REPOSITORY}/${DOCKER_IMAGE_NAME}"
+        ECR_DOCKER_TAG = "${DOCKER_TAG}"
+    }
     
     stages {
         stage('Git Clone') {
@@ -46,9 +55,8 @@ pipeline {
                     // cleanup current user docker credentials
                     sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'                    
                    
-                    docker.withRegistry("https://257307634175.dkr.ecr.ap-northeast-2.amazonaws.com/aws00-spring-petclinic", 
-                                        "ecr:"ap-northeast-2:AWSCredentials") {
-                      docker.image("spring-petclinic:1.0").push()
+                    docker.withRegistry("https://${ECR_REPOSITORY}", "ecr:${REGION}:${AWS_CREDENTIAL_NAME}") {
+                      docker.image("${ECR_DOCKER_IMAGE}:${ECR_DOCKER_TAG}").push()
                     }
                 }
             }
