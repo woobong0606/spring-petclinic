@@ -12,7 +12,7 @@ pipeline {
         DOCKER_TAG="1.0"
         ECR_REPOSITORY = "257307634175.dkr.ecr.ap-northeast-2.amazonaws.com"
         ECR_DOCKER_IMAGE = "${ECR_REPOSITORY}/${DOCKER_IMAGE_NAME}"
-        ECR_DOCKER_TAG = "${DOCKER_TAG}"
+        ECR_DOCKER_TAG = "${DOCKER_TAG}"        
     }
     
     stages {
@@ -54,10 +54,8 @@ pipeline {
                 script{
                     // cleanup current user docker credentials
                     sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'                    
-                   
-                    docker.withRegistry("https://${ECR_REPOSITORY}", "ecr:${REGION}:${AWS_CREDENTIAL_NAME}") {
-                      docker.image("${ECR_DOCKER_IMAGE}:${ECR_DOCKER_TAG}").push()
-                    }
+                    sh 'docker tag aws00-spring-petclinic:1.0 257307634175.dkr.ecr.ap-northeast-2.amazonaws.com/aws00-spring-petclinic:1.0'
+                    sh 'docker push 257307634175.dkr.ecr.ap-northeast-2.amazonaws.com/aws00-spring-petclinic:1.0'
                 }
             }
             post {
