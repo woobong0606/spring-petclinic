@@ -100,7 +100,7 @@ pipeline {
                     --auto-scaling-groups sung-asg \
                     --deployment-group-name aws00-code-deploy \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
-                    --service-role-arn arn:aws:iam::257307634175:role/aws00-codedeploy-service-role
+                    --service-role-arn arn:aws:iam::257307634175:role/sung-codedeploy-service-role
                     '''
                 echo "Codedeploy Workload"   
                 sh '''
