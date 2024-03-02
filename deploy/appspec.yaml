@@ -1,1 +1,19 @@
-##
+version: 0.0
+
+os: linux
+
+files:
+  - source: deploy/
+    destination: /home/ubuntu
+permission:
+  - object: /home/ubuntu
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+hooks:
+  ApplicationStop:
+    - location: deploy/scripts/kill_process.sh
+      timeout: 100
+  ApplicationStart:
+    - location: deploy/scripts/run_process.sh
+      timeout: 3600
