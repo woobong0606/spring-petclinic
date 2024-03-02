@@ -95,7 +95,7 @@ pipeline {
                     aws deploy create-deployment-group \
                     --application-name aws00 \
                     --auto-scaling-groups sung-asg \
-                    --deployment-group-name aws00-code-deploy \
+                    --deployment-group-name aws00-code-deploy-${BUILD_NUMBER} \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
                     --service-role-arn arn:aws:iam::257307634175:role/sung-codedeploy-service-role
                     '''
