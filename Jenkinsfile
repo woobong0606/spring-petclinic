@@ -9,10 +9,8 @@ pipeline {
         AWS_CREDENTIAL_NAME = "AWSCredentials"
         REGION = "ap-northeast-2"
         DOCKER_IMAGE_NAME="aws00-spring-petclinic"
-        DOCKER_TAG="1.0"
         ECR_REPOSITORY = "257307634175.dkr.ecr.ap-northeast-2.amazonaws.com"
         ECR_DOCKER_IMAGE = "${ECR_REPOSITORY}/${DOCKER_IMAGE_NAME}"
-        ECR_DOCKER_TAG = "${DOCKER_TAG}"        
     }
     
     stages {
@@ -44,7 +42,10 @@ pipeline {
         stage ('Docker Build') {
             steps {
                 dir("${env.WORKSPACE}") {
-                    app = docker.build("${ECR_REPOSITORY}/${DOCKER_IMAGE_NAME}")
+                    sh """
+                      docker build -t $ECR_DOCKER_IMAGE:$BUILD_NUMBER .
+                      docker tag $ECR_DOCKER_IMAGE:$BUILD_NUMBER $ECR_DOCKER_IMAGE:latest
+                    """
                 }
             }
         }
@@ -53,11 +54,10 @@ pipeline {
                 echo "Push Docker Image to ECR"
                 script{
                     // cleanup current user docker credentials
-                    sh 'rm -rf ~/.dockercfg || true'
-                    sh 'rm -rf ~/.docker/config.json || true' 
+                    sh 'rm -f ~/.dockercfg ~/.docker/config.json || true' 
                     docker.withRegistry("https://${ECR_REPOSITORY}", "ecr:${REGION}:${AWS_CREDENTIAL_NAME}") {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("${latest}")
+                        docker.image("$ECR_DOCKER_IMAGE:$BUILD_NUMBER").push()
+                        docker.image("$ECR_DOCKER_IMAGE:latest").push
                     }
                     
                 }
@@ -66,6 +66,14 @@ pipeline {
                 success {
                     echo "Push Docker Image success!"
                 }
+            }
+        }
+        stage('Clean Up Docker Images on Jenkins Server') {
+            steps {
+                echo 'Cleaning up unused Docker images on Jenkins server'
+
+                // Clean up unused Docker images, including those created within the last hour
+                sh "docker image prune -f --all --filter \"until=1h\""
             }
         }
     }
