@@ -84,7 +84,7 @@ pipeline {
                     withAWS(region:"${REGION}", credentials:"${AWS_CREDENTIAL_NAME}"){
                       s3Upload(file:"deploy.zip", bucket:"aws00-codedeploy")
                     } 
-                   
+                    sh 'rm -rf ./deploy-1.0.zip'                 
                 }        
             }
         }
