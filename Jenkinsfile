@@ -82,9 +82,9 @@ pipeline {
                 dir("${env.WORKSPACE}") {
                     sh 'zip -r deploy.zip ./deploy appspec.yml'
                     withAWS(region:"${REGION}", credentials:"${AWS_CREDENTIAL_NAME}"){
-                      s3Upload(file:"deploy.zip", bucket:"aws00-codedeploy")
+                      s3Upload(file:"deploy.zip", bucket:"aws00-codedeploy-bucket")
                     } 
-                    sh 'rm -rf ./deploy-1.0.zip'                 
+                    sh 'rm -rf ./deploy.zip'                 
                 }        
             }
         }
@@ -93,18 +93,18 @@ pipeline {
                echo "create Codedeploy group"   
                 sh '''
                     aws deploy create-deployment-group \
-                    --application-name aws00 \
-                    --auto-scaling-groups sung-asg \
+                    --application-name aws00-code-deploy \
+                    --auto-scaling-groups aws00-asg \
                     --deployment-group-name aws00-code-deploy-${BUILD_NUMBER} \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
-                    --service-role-arn arn:aws:iam::257307634175:role/sung-codedeploy-service-role
+                    --service-role-arn arn:aws:iam::257307634175:role/aws00-codedeploy-service-role
                     '''
                 echo "Codedeploy Workload"   
                 sh '''
-                    aws deploy create-deployment --application-name aws00 \
+                    aws deploy create-deployment --application-name aws00-code-deploy \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
                     --deployment-group-name aws00-code-deploy-${BUILD_NUMBER} \
-                    --s3-location bucket=aws00-codedeploy,bundleType=zip,key=deploy.zip
+                    --s3-location bucket=aws00-codedeploy-bucket,bundleType=zip,key=deploy.zip
                     '''
                     sleep(10) // sleep 10s
             }
