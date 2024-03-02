@@ -96,28 +96,28 @@ pipeline {
                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                      credentialsId: "${AWS_CREDENTIAL_NAME}",  
                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
-                  {
-                    step([$class: "AWSCodeDeployPublisher'",
-                      applicationName: "aws00",
-                      awsAccessKey: "${AWS_ACCESS_KEY_ID}",
-                      awsSecretKey: "${AWS_SECRET_ACCESS_KEY}",
-                      credentials: "awsAccessKey",
-                      deploymentConfig: "CodeDeployDefault.OneAtATime", 
-                      deploymentGroupAppspec: false, 
-                      deploymentGroupName: 'aws00-code-deploy', 
-                      excludes: "", 
-                      iamRoleArn: "arn:aws:iam::257307634175:role/aws00-codedeploy-service-role", 
-                      includes: "**", 
-                      proxyHost: "", 
-                      proxyPort: 0, 
-                      region: "ap-northeast-2", 
-                      s3bucket: "aws00-codedeploy", 
-                      s3prefix: "", 
-                      subdirectory: "", 
-                      versionFileName: "",
-                      waitForCompletion: true
-                      pollingTimeoutSec: 1800])
-                  }
+                    {
+                        step([$class: "AWSCodeDeployPublisher'",
+                              applicationName: "aws00",
+                              awsAccessKey: "${AWS_ACCESS_KEY_ID}",
+                              awsSecretKey: "${AWS_SECRET_ACCESS_KEY}",
+                              credentials: "awsAccessKey",
+                              deploymentConfig: "CodeDeployDefault.OneAtATime", 
+                              deploymentGroupAppspec: false, 
+                              deploymentGroupName: 'aws00-code-deploy', 
+                              excludes: "", 
+                              iamRoleArn: "arn:aws:iam::257307634175:role/aws00-codedeploy-service-role", 
+                              includes: "**", 
+                              proxyHost: "", 
+                              proxyPort: 0, 
+                              region: "ap-northeast-2", 
+                              s3bucket: "aws00-codedeploy", 
+                              s3prefix: "", 
+                              subdirectory: "", 
+                              versionFileName: "",
+                              waitForCompletion: true,
+                              pollingTimeoutSec: 1800])
+                    }
                 }
                 sleep(10) // sleep 10s
             }
