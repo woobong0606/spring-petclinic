@@ -13,8 +13,8 @@ hooks:
   ApplicationStop:
     - location: deploy/scripts/kill_process.sh
       timeout: 100
-      runas: root
+      runas: ubuntu
   ApplicationStart:
     - location: deploy/scripts/run_process.sh
       timeout: 3600
-      runas: root
+      runas: ubuntu
