@@ -90,10 +90,7 @@ pipeline {
         }
         stage('Codedeploy Workload') {
             steps {
-                echo "create application"
-                sh 'aws deploy create-application --application-name aws00'
-               
-                echo "create Codedeploy group"   
+               echo "create Codedeploy group"   
                 sh '''
                     aws deploy create-deployment-group \
                     --application-name aws00 \
