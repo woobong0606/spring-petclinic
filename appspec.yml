@@ -5,7 +5,7 @@ files:
     destination: /home/ubuntu
     overwrite: yes
 permission:
-  - object: /home/ubuntu
+  - object: /home/ubuntu/deploy
     pattern: "**"
     owner: ubuntu
     group: ubuntu
