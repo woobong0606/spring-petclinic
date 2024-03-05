@@ -68,7 +68,7 @@ pipeline {
                 }
             }
         }
-/*         
+
         stage('Clean Up Docker Images on Jenkins Server') {
             steps {
                 echo 'Cleaning up unused Docker images on Jenkins server'
@@ -89,6 +89,7 @@ pipeline {
                 }        
             }
         }
+/*         
         stage('Codedeploy Workload') {
             steps {
                echo "create Codedeploy group"   
