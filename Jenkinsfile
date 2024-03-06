@@ -89,7 +89,7 @@ pipeline {
                 }        
             }
         }
-/*         
+         
         stage('Codedeploy Workload') {
             steps {
                echo "create Codedeploy group"   
@@ -110,7 +110,6 @@ pipeline {
                     '''
                     sleep(10) // sleep 10s
             }
-        } 
-*/        
+        }         
     }
 }
