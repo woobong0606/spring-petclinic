@@ -72,15 +72,6 @@ pipeline {
                 sh "docker image prune -f --all --filter \"until=1h\""
             }
         }
-        stage('Upload to S3') {
-
-        }
-        stage('Codedeploy Workload') {
-
-        }
-        
-
-        
         
     }    
 }
