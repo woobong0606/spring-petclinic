@@ -65,9 +65,9 @@ pipeline {
                         docker.image("${ECR_DOCKER_IMAGE}:${BUILD_NUMBER}").push()
                         docker.image("${ECR_DOCKER_IMAGE}:latest").push()
                     }
-                    
                 }
             }
+        }
         stage('Clean Up Docker Images on Jenkins Server') {
             steps {
                 echo 'Cleaning up unused Docker images on Jenkins server'
@@ -77,14 +77,3 @@ pipeline {
         
     }    
 }
-
-
-
-
-
-
-
-
-
-
-
