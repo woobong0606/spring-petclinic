@@ -6,6 +6,14 @@ pipeline {
         maven "M3"
     }
     
+    environment {
+        AWS_CREDENTIAL_NAME = "AWSCredentials"
+        REGION = "ap-northeast-2"
+        DOCKER_IMAGE_NAME = "std00-spring-petclinic"
+        ECR_REPOSITORY = "257307634175.dkr.ecr.ap-northeast-2.amazonaws.com"
+        ECR_DOCKER_IMAGE = "${ECR_REPOSITORY}/${DOCKER_IMAGE_NAME}"
+    }
+    
     stages {
         stage('Git clone') {
             steps {
@@ -35,28 +43,29 @@ pipeline {
             }
         }
 
-        stage('SSH Publish') {
+        stage ('Docker Image Build') {
             steps {
-                echo 'SSH Publish'
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'target', 
-                transfers: [sshTransfer(cleanRemote: false, 
-                excludes: '', 
-                execCommand: '''
-                fuser -k 8080/tcp
-                export BUILD_ID=Pipeline-Test
-                nohup java -jar /home/ubuntu/deploy/spring-petclinic-2.7.3.jar >> nohup.out 2>&1 &''', 
-                execTimeout: 120000, 
-                flatten: false, 
-                makeEmptyDirs: false, 
-                noDefaultExcludes: false, 
-                patternSeparator: '[, ]+', 
-                remoteDirectory: 'deploy', 
-                remoteDirectorySDF: false, 
-                removePrefix: 'target', 
-                sourceFiles: 'target/*.jar')], 
-                usePromotionTimestamp: false, 
-                useWorkspaceInPromotion: false, verbose: false)])
+                echo 'Docker Image Build'
+                dir("${env.WORKSPACE}") {
+                    sh """
+                        docker build -t $ECR_DOCKER_IMAGE:$BUILD_NUMBER .
+                        docker tag $ECR_DOCKER_IMAGE:$BUILD_NUMBER $ECR_DOCKER_IMAGE:latest
+                    """
+                }
             }
         }
+
+        
     }    
 }
+
+
+
+
+
+
+
+
+
+
+
