@@ -1,5 +1,4 @@
 #!/bin/bash
 
 echo "Remove existed container"
-cd /home/ubuntu/deploy
-docker-compose -f docker-compose.yml down || true
+docker-compose -f /home/ubuntu/deploy/docker-compose.yml down || true
