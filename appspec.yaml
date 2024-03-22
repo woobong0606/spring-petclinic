@@ -8,14 +8,14 @@ file_exists_behavior: OVERWRITE
 permissions:
   - object: /home/ubuntu
     pattern: "**"
-    owner: root
-    group: root
+    owner: ubuntu
+    group: ubuntu
 hooks:
   ApplicationStop:
     - location: deploy/scripts/kill_process.sh
       timeout: 100
-      runas: root
+      runas: ubuntu
   ApplicationStart:
     - location: deploy/scripts/run_process.sh
       timeout: 3600
-      runas: root
+      runas: ubuntu
