@@ -1,11 +1,11 @@
 pipeline {
     agent any
-
+    // 도구 설정
     tools {
         jdk "jdk17"
         maven "M3"
     }
-    # 환경 설정
+    // 환경 설정
     environment {
         AWS_CREDENTIAL_NAME = "AWSCredentials"
         REGION = "ap-northeast-2"
