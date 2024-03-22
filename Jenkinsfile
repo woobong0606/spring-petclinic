@@ -103,7 +103,7 @@ pipeline {
                     aws deploy create-deployment --application-name std00-code-deploy \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
                     --deployment-group-name std00-code-deploy-${BUILD_NUMBER} \
-                    --s3-location bucket=std00-codedeploy-bucket, bundleType=zip, key=deploy.zip
+                    --s3-location bucket=std00-codedeploy-bucket,bundleType=zip,key=deploy.zip
                     '''
                     sleep(10) // sleep 10s
             }
