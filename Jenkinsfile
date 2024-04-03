@@ -9,7 +9,7 @@ pipeline {
     environment {
         AWS_CREDENTIAL_NAME = "AWSCredentials"
         REGION = "ap-northeast-2"
-        DOCKER_IMAGE_NAME="std00-spring-petclinic"
+        DOCKER_IMAGE_NAME="std09-spring-petclinic"
         ECR_REPOSITORY = "257307634175.dkr.ecr.ap-northeast-2.amazonaws.com"
         ECR_DOCKER_IMAGE = "${ECR_REPOSITORY}/${DOCKER_IMAGE_NAME}"
     }
@@ -18,7 +18,7 @@ pipeline {
         stage('Git Clone') {
             steps {
                 echo 'Git Clone'
-                git url: 'https://github.com/sjh4616/spring-petclinic.git',
+                git url: 'https://github.com/woobong0606/spring-petclinic.git',
                 branch: 'efficient-webjars', credentialsId: 'GitCredentials'
             }
             post {
@@ -81,7 +81,7 @@ pipeline {
                 dir("${env.WORKSPACE}") {
                     sh 'zip -r deploy.zip ./deploy appspec.yml'
                     withAWS(region:"${REGION}", credentials: "${AWS_CREDENTIAL_NAME}"){
-                        s3Upload(file:"deploy.zip", bucket:"std00-codedeploy-bucket")
+                        s3Upload(file:"deploy.zip", bucket:"std09-codedeploy-bucket")
                     }
                     sh 'rm -rf ./deploy.zip'
                 }
@@ -92,18 +92,18 @@ pipeline {
                echo "create Codedeploy group"   
                 sh '''
                     aws deploy create-deployment-group \
-                    --application-name std00-code-deploy \
-                    --auto-scaling-groups std00-asg-target \
-                    --deployment-group-name std00-code-deploy-${BUILD_NUMBER} \
+                    --application-name std09-code-deploy \
+                    --auto-scaling-groups std09-asg-group \
+                    --deployment-group-name std09-code-deploy-${BUILD_NUMBER} \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
-                    --service-role-arn arn:aws:iam::257307634175:role/std00-codedeploy-service-role
+                    --service-role-arn arn:aws:iam::257307634175:role/std09-codedeploy-service-role
                     '''
                 echo "Codedeploy Workload"   
                 sh '''
-                    aws deploy create-deployment --application-name std00-code-deploy \
+                    aws deploy create-deployment --application-name std09-code-deploy \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
-                    --deployment-group-name std00-code-deploy-${BUILD_NUMBER} \
-                    --s3-location bucket=std00-codedeploy-bucket,bundleType=zip,key=deploy.zip
+                    --deployment-group-name std09-code-deploy-${BUILD_NUMBER} \
+                    --s3-location bucket=std09-codedeploy-bucket,bundleType=zip,key=deploy.zip
                     '''
                     sleep(10) // sleep 10s
             }
