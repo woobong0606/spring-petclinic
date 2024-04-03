@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  std00-spring-petclinic:
+  std09-spring-petclinic:
     image: ${IMAGE}:${TAG}
     container_name: spring-petclinic
     ports:
