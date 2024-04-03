@@ -96,7 +96,7 @@ pipeline {
                     --auto-scaling-groups std09-asg-group \
                     --deployment-group-name std09-code-deploy-${BUILD_NUMBER} \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
-                    --service-role-arn arn:aws:iam::257307634175:role/std09-codedeploy-service-role
+                    --service-role-arn arn:aws:iam::257307634175:role/std09-codedeploy-ecr-role
                     '''
                 echo "Codedeploy Workload"   
                 sh '''
