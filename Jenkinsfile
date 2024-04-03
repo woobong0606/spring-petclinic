@@ -92,17 +92,17 @@ pipeline {
                echo "create Codedeploy group"   
                 sh '''
                     aws deploy create-deployment-group \
-                    --application-name std09-code-deploy \
+                    --application-name std09-codedeploy \
                     --auto-scaling-groups std09-asg-group \
-                    --deployment-group-name std09-code-deploy-${BUILD_NUMBER} \
+                    --deployment-group-name std09-codedeploy-${BUILD_NUMBER} \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
                     --service-role-arn arn:aws:iam::257307634175:role/std09-codedeploy-ec2-role
                     '''
                 echo "Codedeploy Workload"   
                 sh '''
-                    aws deploy create-deployment --application-name std09-code-deploy \
+                    aws deploy create-deployment --application-name std09-codedeploy \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
-                    --deployment-group-name std09-code-deploy-${BUILD_NUMBER} \
+                    --deployment-group-name std09-codedeploy-${BUILD_NUMBER} \
                     --s3-location bucket=std09-codedeploy-bucket,bundleType=zip,key=deploy.zip
                     '''
                     sleep(10) // sleep 10s
