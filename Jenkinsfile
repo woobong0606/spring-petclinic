@@ -7,7 +7,7 @@ pipeline {
     }
     // 환경 설정
     environment {
-        AWS_CREDENTIAL_NAME = "1d03c65d-1d80-4457-bf97-6ee01c0abf6b"
+        AWS_CREDENTIAL_NAME = "std09"
         REGION = "ap-northeast-2"
         DOCKER_IMAGE_NAME="std09-spring-petclinic"
         ECR_REPOSITORY = "257307634175.dkr.ecr.ap-northeast-2.amazonaws.com"
@@ -100,7 +100,7 @@ pipeline {
                     '''
                 echo "Codedeploy Workload"   
                 sh '''
-                    aws deploy create-deployment --application-name std09-spring-petclinic \
+                    aws deploy create-deployment --application-name std09-code-deploy \
                     --deployment-config-name CodeDeployDefault.OneAtATime \
                     --deployment-group-name std09-code-deploy-${BUILD_NUMBER} \
                     --s3-location bucket=std09-codedeploy-bucket,bundleType=zip,key=deploy.zip
