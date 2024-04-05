@@ -60,7 +60,7 @@ pipeline {
                         docker.image("${ECR_DOCKER_IMAGE}:${BUILD_NUMBER}").push()
                         docker.image("${ECR_DOCKER_IMAGE}:latest").push()
                     }
-                 //환경설정   
+                    
                 }
             }
             post {
